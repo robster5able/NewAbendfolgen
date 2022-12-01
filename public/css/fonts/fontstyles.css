@@ -4,7 +4,7 @@
   font-style: normal;
   font-weight: 400;
   src: url('../fonts/nerko-one-v15-latin-regular.eot'); /* IE9 Compat Modes */
-  src: local(''),
+  src: local('../fonts/nerko-one-v15-latin-regular.eot'),
        url('../fonts/nerko-one-v15-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
        url('../fonts/nerko-one-v15-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
        url('../fonts/nerko-one-v15-latin-regular.woff') format('woff'), /* Modern Browsers */
@@ -18,7 +18,7 @@
   font-style: normal;
   font-weight: 400;
   src: url('../fonts/annie-use-your-telescope-v18-latin-regular.eot'); /* IE9 Compat Modes */
-  src: local(''),
+  src: local('../fonts/annie-use-your-telescope-v18-latin-regular.eot'),
        url('../fonts/annie-use-your-telescope-v18-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
        url('../fonts/annie-use-your-telescope-v18-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
        url('../fonts/annie-use-your-telescope-v18-latin-regular.woff') format('woff'), /* Modern Browsers */
