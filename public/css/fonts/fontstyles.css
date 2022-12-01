@@ -3,13 +3,13 @@
   font-family: 'Nerko One';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/nerko-one-v15-latin-regular.eot'); /* IE9 Compat Modes */
-  src: local('../fonts/nerko-one-v15-latin-regular.eot'),
-       url('../fonts/nerko-one-v15-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/nerko-one-v15-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-       url('../fonts/nerko-one-v15-latin-regular.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/nerko-one-v15-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-       url('../fonts/nerko-one-v15-latin-regular.svg#NerkoOne') format('svg'); /* Legacy iOS */
+  src: url('../public/fonts/nerko-one-v15-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local('../public/fonts/nerko-one-v15-latin-regular.eot'),
+       url('../public/fonts/nerko-one-v15-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../public/fonts/nerko-one-v15-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../public/fonts/nerko-one-v15-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('../public/fonts/nerko-one-v15-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../public/fonts/nerko-one-v15-latin-regular.svg#NerkoOne') format('svg'); /* Legacy iOS */
 }
 
 /* annie-use-your-telescope-regular - latin */
