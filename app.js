@@ -17,7 +17,7 @@ var addOrRemove = "none";
 
 var chosenPage = "none";
 
-//let defaultContentLinks = new DefaultContentLinks(); ff
+//let defaultContentLinks = new DefaultContentLinks(); ffg
 
 class link {
   constructor (name, url){
