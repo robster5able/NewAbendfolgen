@@ -10,6 +10,20 @@ font-family: "Annie Use Your Telescope";
   color:#F9F5EB;
 }
 
+*{
+    padding: 0;
+    margin: 0;
+}
+
+html{
+  position: relative;
+  min-height: 100%;
+}
+
+.body{
+  margin-bottom: 60px;
+}
+
 .fontColorDark{
   color: #1C3879;
 }
@@ -122,6 +136,7 @@ font-family: "Annie Use Your Telescope";
 .footer-padding {
 	padding-bottom: 20px;
 }
+
 
 .addVideos{
   margin-top: 80px;
