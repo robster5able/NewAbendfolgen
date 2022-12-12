@@ -10,6 +10,10 @@
 
 <body class="canvas canvasPosition">
 
+  <script
+    src="https://code.jquery.com/jquery-3.6.1.js"
+    integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+    crossorigin="anonymous"></script>
 
 
   <%- include('partials/header') %>
@@ -40,6 +44,13 @@
     <h1 class="headline font fontColorDark marginTop80">Spiel entfernen:</h1>
     <%}%>
 <% if(addOrRemove == "add" || addOrRemove == "remove" ){%>
+
+  <script>
+        $(document).ready(function() {
+            $('html, body').animate({scrollTop:1000},'50');
+        });
+    </script>
+
 <form class="" action="/addOrRemoveGame" method="post">
     <div class="mb-3 form-group">
       <label class="form-label font buttonText">Name</label>

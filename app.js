@@ -11,6 +11,8 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 const app = express();
 
+
+
 app.set('view engine', 'ejs');
 
 var addOrRemove = "none";
@@ -339,7 +341,7 @@ console.log("addOrRemoveYouTubeVideo");
       //Abort
     }
   addOrRemove = "none";
-  
+
   switch(chosenPage) {
   case "basketball":
       res.redirect("/basketball");

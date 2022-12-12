@@ -11,6 +11,10 @@
 <body class="canvas canvasPosition">
   <%- include('partials/header') %>
 
+  <script
+    src="https://code.jquery.com/jquery-3.6.1.js"
+    integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+    crossorigin="anonymous"></script>
 
 
   <h1 class="headline font fontColorDark"><%=title%></h1>
@@ -70,6 +74,13 @@ i++;
     <h1 class="headline font fontColorDark marginTop80">Video entfernen:</h1>
     <%}%>
 <% if(addOrRemove == "add" || addOrRemove == "remove" ){%>
+
+  <script>
+        $(document).ready(function() {
+            $('html, body').animate({scrollTop:1000},'50');
+        });
+    </script>
+
 <form class="" action="/addOrRemoveYouTubeVideo" method="post">
     <div class="mb-3 form-group">
       <label class="form-label font buttonText">Url</label>
