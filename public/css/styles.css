@@ -66,7 +66,7 @@ html{
 }
 
 .nav-link{
-  font-size: 2em;
+  font-size: 3em;
   margin-right: 25px;
 }
 
@@ -90,12 +90,12 @@ html{
 }
 
 .headerText{
-  font-size: 3em
+  font-size: 4em
 }
 
 .headline{
   text-align: center;
-  font-size: 3em
+  font-size: 4em
 }
 
 .linksButtons{
@@ -103,7 +103,7 @@ html{
 }
 
 .subHeaderText{
-  font-size: 2em
+  font-size: 2.5em
 }
 
 .btn-outline-primary:hover{
@@ -118,7 +118,7 @@ html{
 }
 
 .buttonText{
-  font-size: 1.5em
+  font-size: 2em
 }
 
 .btnAddItem{
