@@ -74,6 +74,40 @@ var contentFussballSongs = [
   "https://www.youtube.com/embed/jnJspO-qZMA"
 ]
 
+//import {readFileSync, promises as fsPromises} from 'fs';
+const {readFileSync, promises: fsPromises} = require('fs');
+
+// ✅ read file SYNCHRONOUSLY
+function syncReadFile(filename) {
+  const contents = readFileSync(filename, 'utf-8');
+
+  const arr = contents.split(/\r?\n/);
+  arr.forEach(myFunction);
+
+
+  console.log(arr); // 👉️ ['One', 'Two', 'Three', 'Four']
+
+  return arr;
+}
+
+function myFunction(item, index) {
+  contentLinks.push(new link(item, "test"));
+}
+
+const fs = require('fs');
+
+function writeToTxtFile(item)
+{
+  // Write data in 'Output.txt' .
+    fs.writeFile('links.txt', item, (err) => {
+
+        // In case of a error throw err.
+        if (err) throw err;
+    })
+}
+
+syncReadFile('./links.txt');
+
 
 app.use(bodyParser.urlencoded({
   extended: true
