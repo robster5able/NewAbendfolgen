@@ -25,21 +25,21 @@ class link {
 }
 
 var contentLinks = [
-  new link("Löwenzahn", "https://www.zdf.de/kinder/loewenzahn"),
-  new link("Robin Hood", "https://www.zdf.de/kinder/robin-hood"),
-  new link("Abenteuer Meerjungfrau", "https://www.zdf.de/kinder/h2o-abenteuer-meerjungfrau"),
-  new link("Wickie", "https://www.zdf.de/kinder/wickie-und-die-starken-maenner"),
-  new link("Jonalu", "https://www.zdf.de/kinder/jonalu"),
-  new link("Bibi und Tina", "https://www.zdf.de/kinder/bibi-und-tina"),
-  new link("Kokusnuss", "https://www.zdf.de/kinder/der-kleine-drache-kokosnuss"),
-  new link("Marcus Level", "https://www.zdf.de/kinder/marcus-level"),
-  new link("Petterson und Findus", "https://www.zdf.de/kinder/pettersson-und-findus"),
-  new link("Heidi", "https://www.zdf.de/kinder/heidi"),
-  new link("Checker Tobi", "https://www.ardmediathek.de/sammlung/checker-reportagen/5pWQjFo06Cq9XRDU6ECIeN?isChildContent"),
-  new link("Möwenweg Kinder", "https://www.zdf.de/kinder/wir-kinder-aus-dem-moewenweg"),
-  new link("Peter Pan", "https://www.zdf.de/kinder/peter-pan"),
-  new link("Biene Maja", "https://www.zdf.de/kinder/die-biene-maja"),
-  new link("Petronella Apfelmus", "https://www.zdf.de/kinder/petronella-apfelmus")
+  //new link("Löwenzahn", "https://www.zdf.de/kinder/loewenzahn"),
+  //new link("Robin Hood", "https://www.zdf.de/kinder/robin-hood"),
+  //new link("Abenteuer Meerjungfrau", "https://www.zdf.de/kinder/h2o-abenteuer-meerjungfrau"),
+  //new link("Wickie", "https://www.zdf.de/kinder/wickie-und-die-starken-maenner"),
+  //new link("Jonalu", "https://www.zdf.de/kinder/jonalu"),
+  //new link("Bibi und Tina", "https://www.zdf.de/kinder/bibi-und-tina"),
+  //new link("Kokusnuss", "https://www.zdf.de/kinder/der-kleine-drache-kokosnuss"),
+  //new link("Marcus Level", "https://www.zdf.de/kinder/marcus-level"),
+  //new link("Petterson und Findus", "https://www.zdf.de/kinder/pettersson-und-findus"),
+  //new link("Heidi", "https://www.zdf.de/kinder/heidi"),
+  //new link("Checker Tobi", "https://www.ardmediathek.de/sammlung/checker-reportagen/5pWQjFo06Cq9XRDU6ECIeN?isChildContent"),
+  //new link("Möwenweg Kinder", "https://www.zdf.de/kinder/wir-kinder-aus-dem-moewenweg"),
+  //new link("Peter Pan", "https://www.zdf.de/kinder/peter-pan"),
+  //new link("Biene Maja", "https://www.zdf.de/kinder/die-biene-maja"),
+  //new link("Petronella Apfelmus", "https://www.zdf.de/kinder/petronella-apfelmus")
 ]
 
 var contentGames = [
@@ -82,7 +82,7 @@ function syncReadFile(filename) {
   const contents = readFileSync(filename, 'utf-8');
 
   const arr = contents.split(/\r?\n/);
-  arr.forEach(myFunction);
+  arr.forEach(addToArray);
 
 
   console.log(arr); // 👉️ ['One', 'Two', 'Three', 'Four']
@@ -90,11 +90,43 @@ function syncReadFile(filename) {
   return arr;
 }
 
-function myFunction(item, index) {
-  contentLinks.push(new link(item, "test"));
-}
+function addToArray(item, index) {
 
-const fs = require('fs');
+  let itemArr = item.split(";")
+if(itemArr[0] != "" && itemArr[1] != ""){
+  contentLinks.push(new link(itemArr[0], itemArr[1]));
+}
+}
+function writeArrayToFile(){
+
+  const fs = require('fs');
+  const writeStream = fs.createWriteStream('links.txt');
+  const pathName = writeStream.path;
+
+  // write each value of the array on the file breaking line
+  //contentLinks.forEach(value => writeStream.write(`${value[0]}\n`));
+
+
+  contentLinks.forEach(function(link) {
+    if(link.name != "" && link.url != ""){
+    writeStream.write(link.name + ";" + link.url + "\n");
+  }
+  });
+
+  // the finish event is emitted when all data has been flushed from the stream
+  writeStream.on('finish', () => {
+     console.log(`wrote all the array data to file ${pathName}`);
+  });
+
+  // handle the errors on the write process
+  writeStream.on('error', (err) => {
+      console.error(`There is an error writing the file ${pathName} => ${err}`)
+  });
+
+  // close the stream
+  writeStream.end();
+
+}
 
 function writeToTxtFile(item)
 {
@@ -220,6 +252,7 @@ console.log("addOrRemoveLink");
       //Add new button with link
       if(req.body.name.length > 0 && req.body.url.length > 0){
         contentLinks.push(new link(req.body.name, req.body.url));
+        writeArrayToFile();
       }
     } else {
       //Abort
