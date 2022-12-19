@@ -4,7 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const lodash = require("lodash");
-
+const mongoose = require("mongoose");
 const app = express();
 
 
@@ -25,21 +25,21 @@ class link {
 }
 
 var contentLinks = [
-  //new link("Löwenzahn", "https://www.zdf.de/kinder/loewenzahn"),
-  //new link("Robin Hood", "https://www.zdf.de/kinder/robin-hood"),
-  //new link("Abenteuer Meerjungfrau", "https://www.zdf.de/kinder/h2o-abenteuer-meerjungfrau"),
-  //new link("Wickie", "https://www.zdf.de/kinder/wickie-und-die-starken-maenner"),
-  //new link("Jonalu", "https://www.zdf.de/kinder/jonalu"),
-  //new link("Bibi und Tina", "https://www.zdf.de/kinder/bibi-und-tina"),
-  //new link("Kokusnuss", "https://www.zdf.de/kinder/der-kleine-drache-kokosnuss"),
-  //new link("Marcus Level", "https://www.zdf.de/kinder/marcus-level"),
-  //new link("Petterson und Findus", "https://www.zdf.de/kinder/pettersson-und-findus"),
-  //new link("Heidi", "https://www.zdf.de/kinder/heidi"),
-  //new link("Checker Tobi", "https://www.ardmediathek.de/sammlung/checker-reportagen/5pWQjFo06Cq9XRDU6ECIeN?isChildContent"),
-  //new link("Möwenweg Kinder", "https://www.zdf.de/kinder/wir-kinder-aus-dem-moewenweg"),
-  //new link("Peter Pan", "https://www.zdf.de/kinder/peter-pan"),
-  //new link("Biene Maja", "https://www.zdf.de/kinder/die-biene-maja"),
-  //new link("Petronella Apfelmus", "https://www.zdf.de/kinder/petronella-apfelmus")
+  new link("Löwenzahn", "https://www.zdf.de/kinder/loewenzahn"),
+  new link("Robin Hood", "https://www.zdf.de/kinder/robin-hood"),
+  new link("Abenteuer Meerjungfrau", "https://www.zdf.de/kinder/h2o-abenteuer-meerjungfrau"),
+  new link("Wickie", "https://www.zdf.de/kinder/wickie-und-die-starken-maenner"),
+  new link("Jonalu", "https://www.zdf.de/kinder/jonalu"),
+  new link("Bibi und Tina", "https://www.zdf.de/kinder/bibi-und-tina"),
+  new link("Kokusnuss", "https://www.zdf.de/kinder/der-kleine-drache-kokosnuss"),
+  new link("Marcus Level", "https://www.zdf.de/kinder/marcus-level"),
+  new link("Petterson und Findus", "https://www.zdf.de/kinder/pettersson-und-findus"),
+  new link("Heidi", "https://www.zdf.de/kinder/heidi"),
+  new link("Checker Tobi", "https://www.ardmediathek.de/sammlung/checker-reportagen/5pWQjFo06Cq9XRDU6ECIeN?isChildContent"),
+  new link("Möwenweg Kinder", "https://www.zdf.de/kinder/wir-kinder-aus-dem-moewenweg"),
+  new link("Peter Pan", "https://www.zdf.de/kinder/peter-pan"),
+  new link("Biene Maja", "https://www.zdf.de/kinder/die-biene-maja"),
+  new link("Petronella Apfelmus", "https://www.zdf.de/kinder/petronella-apfelmus")
 ]
 
 var contentGames = [
@@ -73,6 +73,69 @@ var contentFussballSongs = [
   "https://www.youtube.com/embed/nNvamtbFPhg",
   "https://www.youtube.com/embed/jnJspO-qZMA"
 ]
+
+
+mongoose.connect("mongodb+srv://robster5able:moggapur24@clusterrob2.mg5qhz8.mongodb.net/todolistDB", {useNewUrlParser:true});
+
+const linkSchema = {
+  name: String,
+  url: String
+}
+
+const linkItem = mongoose.model("linkItem", linkSchema);
+const ItemArrayLinks = new Array(0);
+//contentLinks.forEach(addToItemArrayLinks);
+
+
+
+function addToItemArrayLinks(item, index) {
+  ItemArrayLinks.push(
+    new linkItem ({
+      name: item.name,
+      url:item.url
+    }));
+}
+
+function fillLinksInDB(){
+  linkItem.insertMany(ItemArrayLinks, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log("Successfully saved default items to DB");
+    }
+  });
+}
+
+
+
+/*
+const itemsSchema = {
+  name: String
+};
+
+const Item = mongoose.model("Item", itemsSchema);
+
+const item1 = new Item ({
+  name: "Welcome to your todolist!"
+});
+
+const item2 = new Item ({
+  name: "Hit the button"
+});
+
+const item3 = new Item ({
+  name: "Hit delete"
+});
+
+const defaultItems = [item1, item2, item3];
+
+Item.insertMany(defaultItems, function(err){
+  if(err){
+    console.log(err);
+  } else {
+    console.log("Successfully saved default items to DB");
+  }
+}); */
 
 //import {readFileSync, promises as fsPromises} from 'fs';
 const {readFileSync, promises: fsPromises} = require('fs');
@@ -152,12 +215,34 @@ var posts = [];
 app.get("/", function(req, res) {
 
   chosenPage = "links";
+  //contentLinks = [];
+  linkItem.find({}, function(err, foundItems){
 
-  res.render("links", {
+console.log(foundItems);
+
+    res.render("links", {
+      content: foundItems,
+      title: "Links",
+      addOrRemove: addOrRemove
+    })
+
+    /*foundItems.forEach(function(itemm) {
+      if(itemm.name != "" && itemm.url != ""){
+      contentLinks.push(new link(itemm.name, itemm.url));
+      console.log("put in array: " + itemm.name + "," + itemm.url);
+    }
+  });*/
+  });
+
+console.log("found in database: ");
+console.log(contentLinks);
+
+  /*res.render("links", {
     content: contentLinks,
     title: "Links",
     addOrRemove: addOrRemove
   })
+  contentLinks = [];*/
 });
 
 app.get("/games", function(req, res) {
@@ -252,6 +337,14 @@ console.log("addOrRemoveLink");
       //Add new button with link
       if(req.body.name.length > 0 && req.body.url.length > 0){
         contentLinks.push(new link(req.body.name, req.body.url));
+
+        const newLinkItem = new linkItem ({
+          name: req.body.name,
+          url:req.body.url
+        });
+
+        newLinkItem.save();
+
         writeArrayToFile();
       }
     } else {
