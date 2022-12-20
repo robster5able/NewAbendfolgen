@@ -75,19 +75,43 @@ var contentFussballSongs = [
 ]
 
 
-mongoose.connect("mongodb+srv://robster5able:moggapur24@clusterrob2.mg5qhz8.mongodb.net/todolistDB", {useNewUrlParser:true});
+mongoose.connect("mongodb+srv://robster5able:moggapur24@clusterrob2.mg5qhz8.mongodb.net/abendfolgen", {useNewUrlParser:true});
 
 const linkSchema = {
   name: String,
   url: String
 }
 
+const youtubeVideoSchema = {
+  url: String
+}
+
 const linkItem = mongoose.model("linkItem", linkSchema);
 const ItemArrayLinks = new Array(0);
 //contentLinks.forEach(addToItemArrayLinks);
+//fillLinksInDB();
 
+const gameItem = mongoose.model("gameItem", linkSchema);
+const ItemArrayGames = new Array(0);
+//contentGames.forEach(addToItemArrayGames);
+//fillGamesInDB();
 
+const fussballSongItem = mongoose.model("fussballSongItem", youtubeVideoSchema);
+const ItemArrayFussballSongs = new Array(0);
+//contentFussballSongs.forEach(addToItemArrayFussballSongs);
+//fillFussballSongsInDB();
 
+const fussballUebungItem = mongoose.model("fussballUebungItem", youtubeVideoSchema);
+const ItemArrayFussballUebungen = new Array(0);
+//contentFussballUebungen.forEach(addToItemArrayFussballUebungen);
+//fillFussballUebungenInDB();
+
+const basketballItem = mongoose.model("basketballItem", youtubeVideoSchema);
+const ItemArrayBasketball = new Array(0);
+//contentBasketball.forEach(addToItemArrayBasketball);
+//fillBasketballInDB();
+
+// Zum initialen befüllen der Datenbank
 function addToItemArrayLinks(item, index) {
   ItemArrayLinks.push(
     new linkItem ({
@@ -96,49 +120,89 @@ function addToItemArrayLinks(item, index) {
     }));
 }
 
+function addToItemArrayGames(item, index) {
+  ItemArrayGames.push(
+    new gameItem ({
+      name: item.name,
+      url:item.url
+    }));
+}
+
+function addToItemArrayFussballSongs(item, index) {
+  ItemArrayFussballSongs.push(
+    new fussballSongItem ({
+      url:item
+    }));
+}
+
+function addToItemArrayFussballUebungen(item, index) {
+  ItemArrayFussballUebungen.push(
+    new fussballUebungItem ({
+      url:item
+    }));
+}
+
+function addToItemArrayBasketball(item, index) {
+  ItemArrayBasketball.push(
+    new basketballItem ({
+      url:item
+    }));
+}
+
+
+
 function fillLinksInDB(){
   linkItem.insertMany(ItemArrayLinks, function(err){
     if(err){
       console.log(err);
     } else {
-      console.log("Successfully saved default items to DB");
+      console.log("Successfully saved default link items to DB");
+    }
+  });
+}
+
+function fillGamesInDB(){
+  gameItem.insertMany(ItemArrayGames, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log("Successfully saved default game items to DB");
+    }
+  });
+}
+
+function fillFussballSongsInDB(){
+  fussballSongItem.insertMany(ItemArrayFussballSongs, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log("Successfully saved default FussballSongs items to DB");
+    }
+  });
+}
+
+function fillFussballUebungenInDB(){
+  fussballUebungItem.insertMany(ItemArrayFussballUebungen, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log("Successfully saved default FussballUebungen items to DB");
+    }
+  });
+}
+
+function fillBasketballInDB(){
+  basketballItem.insertMany(ItemArrayBasketball, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log("Successfully saved default Basketball items to DB");
     }
   });
 }
 
 
-
-/*
-const itemsSchema = {
-  name: String
-};
-
-const Item = mongoose.model("Item", itemsSchema);
-
-const item1 = new Item ({
-  name: "Welcome to your todolist!"
-});
-
-const item2 = new Item ({
-  name: "Hit the button"
-});
-
-const item3 = new Item ({
-  name: "Hit delete"
-});
-
-const defaultItems = [item1, item2, item3];
-
-Item.insertMany(defaultItems, function(err){
-  if(err){
-    console.log(err);
-  } else {
-    console.log("Successfully saved default items to DB");
-  }
-}); */
-
-//import {readFileSync, promises as fsPromises} from 'fs';
-const {readFileSync, promises: fsPromises} = require('fs');
+/*const {readFileSync, promises: fsPromises} = require('fs');
 
 // ✅ read file SYNCHRONOUSLY
 function syncReadFile(filename) {
@@ -151,8 +215,31 @@ function syncReadFile(filename) {
   console.log(arr); // 👉️ ['One', 'Two', 'Three', 'Four']
 
   return arr;
+}*/
+
+function deleteLinkFromDatabase(name){
+  linkItem.findOneAndDelete({name: name }, function (err, docs) {
+      if (err){
+          console.log(err)
+      }
+      else{
+          console.log("Deleted link : ", docs);
+      }
+  });
 }
 
+function deleteGameFromDatabase(name){
+  gameItem.findOneAndDelete({name: name }, function (err, docs) {
+      if (err){
+          console.log(err)
+      }
+      else{
+          console.log("Deleted game : ", docs);
+      }
+  });
+}
+
+/*
 function addToArray(item, index) {
 
   let itemArr = item.split(";")
@@ -201,7 +288,7 @@ function writeToTxtFile(item)
     })
 }
 
-syncReadFile('./links.txt');
+syncReadFile('./links.txt');*/
 
 
 app.use(bodyParser.urlencoded({
@@ -213,48 +300,27 @@ app.use(express.static("public"));
 var posts = [];
 
 app.get("/", function(req, res) {
-
   chosenPage = "links";
-  //contentLinks = [];
   linkItem.find({}, function(err, foundItems){
-
-console.log(foundItems);
-
     res.render("links", {
       content: foundItems,
       title: "Links",
       addOrRemove: addOrRemove
     })
-
-    /*foundItems.forEach(function(itemm) {
-      if(itemm.name != "" && itemm.url != ""){
-      contentLinks.push(new link(itemm.name, itemm.url));
-      console.log("put in array: " + itemm.name + "," + itemm.url);
-    }
-  });*/
   });
-
-console.log("found in database: ");
-console.log(contentLinks);
-
-  /*res.render("links", {
-    content: contentLinks,
-    title: "Links",
-    addOrRemove: addOrRemove
-  })
-  contentLinks = [];*/
 });
 
 app.get("/games", function(req, res) {
-
   chosenPage = "games";
-
-  res.render("games", {
-    content: contentGames,
-    title: "Spiele",
-    addOrRemove: addOrRemove
-  })
+  gameItem.find({}, function(err, foundItems){
+    res.render("games", {
+      content: foundItems,
+      title: "Spiele",
+      addOrRemove: addOrRemove
+    })
+  });
 });
+
 
 app.get("/fussballsongs", function(req, res) {
 
@@ -331,42 +397,22 @@ console.log("gotya");
 });
 
 app.post("/addOrRemoveLink", function(req, res) {
-console.log("addOrRemoveLink");
   if(addOrRemove == "add"){
     if(req.body.submit_button == "Ok") {
       //Add new button with link
       if(req.body.name.length > 0 && req.body.url.length > 0){
-        contentLinks.push(new link(req.body.name, req.body.url));
-
         const newLinkItem = new linkItem ({
           name: req.body.name,
           url:req.body.url
         });
-
         newLinkItem.save();
-
-        writeArrayToFile();
       }
     } else {
       //Abort
     }
   } else if (addOrRemove == "remove"){
       if(req.body.submit_button == "Ok") {
-        //remove button with link
-        let i = 0;
-        let pos = -1;
-
-        contentLinks.forEach(function(link) {
-          if(link.name == req.body.name){
-            pos = i;
-          }
-          i++;
-        });
-
-        if(pos != -1){
-          //remove item
-          contentLinks.splice(pos,1);
-        }
+        deleteLinkFromDatabase(req.body.name);
       } else {
         //Abort
       }
@@ -378,33 +424,22 @@ console.log("addOrRemoveLink");
 });
 
 app.post("/addOrRemoveGame", function(req, res) {
-console.log("addOrRemoveGame");
   if(addOrRemove == "add"){
     if(req.body.submit_button == "Ok") {
       //Add new button with link
       if(req.body.name.length > 0 && req.body.url.length > 0){
-        contentGames.push(new link(req.body.name, req.body.url));
+        const newGameItem = new gameItem ({
+          name: req.body.name,
+          url:req.body.url
+        });
+        newGameItem.save();
       }
     } else {
       //Abort
     }
   } else if (addOrRemove == "remove"){
       if(req.body.submit_button == "Ok") {
-        //remove button with link
-        let i = 0;
-        let pos = -1;
-
-        contentGames.forEach(function(link) {
-          if(link.name == req.body.name){
-            pos = i;
-          }
-          i++;
-        });
-
-        if(pos != -1){
-          //remove item
-          contentGames.splice(pos,1);
-        }
+        deleteGameFromDatabase(req.body.name);
       } else {
         //Abort
       }
@@ -414,6 +449,9 @@ console.log("addOrRemoveGame");
   addOrRemove = "none";
   res.redirect("/games");
 });
+
+
+
 
 app.post("/addOrRemoveYouTubeVideo", function(req, res) {
 console.log("addOrRemoveYouTubeVideo");
