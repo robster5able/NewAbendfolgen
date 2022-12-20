@@ -51,6 +51,14 @@ var contentBasketball = [
   "https://www.youtube.com/embed/GgIxIZhEAs0"
 ]
 
+var contentMusik = [
+
+]
+
+var contentDoku = [
+
+]
+
 var contentFussballUebungen = [
   "https://www.youtube.com/embed/eM6_TlbcASM",
   "https://www.youtube.com/embed/W7D-JJesUTo",
@@ -111,6 +119,16 @@ const ItemArrayBasketball = new Array(0);
 //contentBasketball.forEach(addToItemArrayBasketball);
 //fillBasketballInDB();
 
+const musikItem = mongoose.model("musikItem", youtubeVideoSchema);
+const ItemArrayMusik = new Array(0);
+//contentMusik.forEach(addToItemArrayMusik);
+//fillMusikInDB();
+
+const dokuItem = mongoose.model("dokuItem", youtubeVideoSchema);
+const ItemArrayDoku= new Array(0);
+//contentDoku.forEach(addToItemArrayDoku);
+//fillDokuInDB();
+
 // Zum initialen befüllen der Datenbank
 function addToItemArrayLinks(item, index) {
   ItemArrayLinks.push(
@@ -145,6 +163,20 @@ function addToItemArrayFussballUebungen(item, index) {
 function addToItemArrayBasketball(item, index) {
   ItemArrayBasketball.push(
     new basketballItem ({
+      url:item
+    }));
+}
+
+function addToItemArrayMusik(item, index) {
+  ItemArrayMusik.push(
+    new musikItem ({
+      url:item
+    }));
+}
+
+function addToItemArrayDoku(item, index) {
+  ItemArrayDoku.push(
+    new dokuItem ({
       url:item
     }));
 }
@@ -201,21 +233,26 @@ function fillBasketballInDB(){
   });
 }
 
+function fillMusikInDB(){
+  musikItem.insertMany(ItemArrayMusik, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log("Successfully saved default Musik items to DB");
+    }
+  });
+}
 
-/*const {readFileSync, promises: fsPromises} = require('fs');
+function fillDokuInDB(){
+  dokuItem.insertMany(ItemArrayDoku, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log("Successfully saved default Doku items to DB");
+    }
+  });
+}
 
-// ✅ read file SYNCHRONOUSLY
-function syncReadFile(filename) {
-  const contents = readFileSync(filename, 'utf-8');
-
-  const arr = contents.split(/\r?\n/);
-  arr.forEach(addToArray);
-
-
-  console.log(arr); // 👉️ ['One', 'Two', 'Three', 'Four']
-
-  return arr;
-}*/
 
 function deleteLinkFromDatabase(name){
   linkItem.findOneAndDelete({name: name }, function (err, docs) {
@@ -239,56 +276,61 @@ function deleteGameFromDatabase(name){
   });
 }
 
-/*
-function addToArray(item, index) {
-
-  let itemArr = item.split(";")
-if(itemArr[0] != "" && itemArr[1] != ""){
-  contentLinks.push(new link(itemArr[0], itemArr[1]));
-}
-}
-function writeArrayToFile(){
-
-  const fs = require('fs');
-  const writeStream = fs.createWriteStream('links.txt');
-  const pathName = writeStream.path;
-
-  // write each value of the array on the file breaking line
-  //contentLinks.forEach(value => writeStream.write(`${value[0]}\n`));
-
-
-  contentLinks.forEach(function(link) {
-    if(link.name != "" && link.url != ""){
-    writeStream.write(link.name + ";" + link.url + "\n");
-  }
+function deleteFussballSongFromDatabase(url){
+  fussballSongItem.findOneAndDelete({url: url }, function (err, docs) {
+      if (err){
+          console.log(err)
+      }
+      else{
+          console.log("Deleted FussballSong : ", docs);
+      }
   });
-
-  // the finish event is emitted when all data has been flushed from the stream
-  writeStream.on('finish', () => {
-     console.log(`wrote all the array data to file ${pathName}`);
-  });
-
-  // handle the errors on the write process
-  writeStream.on('error', (err) => {
-      console.error(`There is an error writing the file ${pathName} => ${err}`)
-  });
-
-  // close the stream
-  writeStream.end();
-
 }
 
-function writeToTxtFile(item)
-{
-  // Write data in 'Output.txt' .
-    fs.writeFile('links.txt', item, (err) => {
-
-        // In case of a error throw err.
-        if (err) throw err;
-    })
+function deleteFussballUebungFromDatabase(url){
+  fussballUebungItem.findOneAndDelete({url: url }, function (err, docs) {
+      if (err){
+          console.log(err)
+      }
+      else{
+          console.log("Deleted Fussball Uebung : ", docs);
+      }
+  });
 }
 
-syncReadFile('./links.txt');*/
+function deleteBasketballFromDatabase(url){
+  basketballItem.findOneAndDelete({url: url }, function (err, docs) {
+      if (err){
+          console.log(err)
+      }
+      else{
+          console.log("Deleted Basketball : ", docs);
+      }
+  });
+}
+
+function deleteMusikFromDatabase(url){
+  musikItem.findOneAndDelete({url: url }, function (err, docs) {
+      if (err){
+          console.log(err)
+      }
+      else{
+          console.log("Deleted Musik : ", docs);
+      }
+  });
+}
+
+function deleteDokuFromDatabase(url){
+  dokuItem.findOneAndDelete({url: url }, function (err, docs) {
+      if (err){
+          console.log(err)
+      }
+      else{
+          console.log("Deleted Doku : ", docs);
+      }
+  });
+}
+
 
 
 app.use(bodyParser.urlencoded({
@@ -323,40 +365,59 @@ app.get("/games", function(req, res) {
 
 
 app.get("/fussballsongs", function(req, res) {
-
   chosenPage = "fussballsongs";
-
-  res.render("youtubevideos", {
-    content: contentFussballSongs,
-    title: "Fußball-Lieder",
-    addOrRemove: addOrRemove
-  })
+  fussballSongItem.find({}, function(err, foundItems){
+    res.render("youtubevideos", {
+      content: foundItems,
+      title: "Fußball-Lieder",
+      addOrRemove: addOrRemove
+    })
+  });
 });
 
 app.get("/fussballUebungen", function(req, res) {
-
   chosenPage = "fussballUebungen";
-
-  res.render("youtubevideos", {
-    content: contentFussballUebungen,
-    title: "Fußball-Übungen",
-    addOrRemove: addOrRemove
-  })
+  fussballUebungItem.find({}, function(err, foundItems){
+    res.render("youtubevideos", {
+      content: foundItems,
+      title: "Fußball-Übungen",
+      addOrRemove: addOrRemove
+    })
+  });
 });
 
 app.get("/basketball", function(req, res) {
-
   chosenPage = "basketball";
-
-  res.render("youtubevideos", {
-    content: contentBasketball,
-    title: "Basketball",
-    addOrRemove: addOrRemove
-  })
+  basketballItem.find({}, function(err, foundItems){
+    res.render("youtubevideos", {
+      content: foundItems,
+      title: "Basketball",
+      addOrRemove: addOrRemove
+    })
+  });
 });
 
+app.get("/musik", function(req, res) {
+  chosenPage = "musik";
+  musikItem.find({}, function(err, foundItems){
+    res.render("youtubevideos", {
+      content: foundItems,
+      title: "Musik",
+      addOrRemove: addOrRemove
+    })
+  });
+});
 
-
+app.get("/doku", function(req, res) {
+  chosenPage = "doku";
+  dokuItem.find({}, function(err, foundItems){
+    res.render("youtubevideos", {
+      content: foundItems,
+      title: "Doku",
+      addOrRemove: addOrRemove
+    })
+  });
+});
 
 //-------post requests
 
@@ -383,6 +444,12 @@ app.post("/", function(req, res) {
       break;
   case "fussballsongs":
       res.redirect("/fussballsongs");
+      break;
+  case "musik":
+      res.redirect("/musik");
+      break;
+  case "doku":
+      res.redirect("/doku");
       break;
   default:
 
@@ -462,13 +529,34 @@ console.log("addOrRemoveYouTubeVideo");
 
         switch(chosenPage) {
         case "basketball":
-            contentBasketball.push(req.body.url);
+            const newBasketballItem = new basketballItem ({
+              url:req.body.url
+            });
+            newBasketballItem.save();
             break;
         case "fussballUebungen":
-            contentFussballUebungen.push(req.body.url);
+            const newFussballUebungItem = new fussballUebungItem ({
+              url:req.body.url
+            });
+            newFussballUebungItem.save();
             break;
         case "fussballsongs":
-            contentFussballSongs.push(req.body.url);
+            const newFussballSongItem = new fussballSongItem ({
+              url:req.body.url
+            });
+            newFussballSongItem.save();
+            break;
+        case "musik":
+            const newMusikItem = new musikItem ({
+              url:req.body.url
+            });
+            newMusikItem.save();
+            break;
+        case "doku":
+            const newDokuItem = new dokuItem ({
+              url:req.body.url
+            });
+            newDokuItem.save();
             break;
         default:
         }
@@ -478,42 +566,27 @@ console.log("addOrRemoveYouTubeVideo");
     }
   } else if (addOrRemove == "remove"){
       if(req.body.submit_button == "Ok") {
-        //remove button with link
-        let i = 0;
-        let pos = -1;
-
-
-
         switch(chosenPage) {
         case "basketball":
-            contentBasketball.forEach(function(link) {
-              if(link.url == req.body.name){
-                pos = i;
-              }
-              i++;
-            });
+        deleteBasketballFromDatabase(req.body.url);
             break;
         case "fussballUebungen":
-            contentFussballUebungen.forEach(function(link) {
-              if(link.url == req.body.name){
-                pos = i;
-              }
-              i++;
-            });
+        deleteFussballUebungFromDatabase(req.body.url);
             break;
         case "fussballsongs":
-            contentFussballSongs.forEach(function(link) {
-              if(link.url == req.body.name){
-                pos = i;
-              }
-              i++;
-            });
+        deleteFussballSongFromDatabase(req.body.url);
+            break;
+        case "musik":
+        deleteMusikFromDatabase(req.body.url);
+            break;
+        case "doku":
+        deleteDokuFromDatabase(req.body.url);
             break;
         default:
         }
 
 
-        if(pos != -1){
+        /*if(pos != -1){
           //remove item
           switch(chosenPage) {
           case "basketball":
@@ -527,7 +600,7 @@ console.log("addOrRemoveYouTubeVideo");
               break;
           default:
           }
-        }
+        }*/
       } else {
         //Abort
       }
@@ -545,6 +618,12 @@ console.log("addOrRemoveYouTubeVideo");
       break;
   case "fussballsongs":
       res.redirect("/fussballsongs");
+      break;
+  case "musik":
+      res.redirect("/musik");
+      break;
+  case "doku":
+      res.redirect("/doku");
       break;
   default:
   }
