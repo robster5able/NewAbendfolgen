@@ -30,14 +30,14 @@ if(i == 0)
     <div class="carousel-inner" style="padding:10% align:auto">
       <div class="carousel-item active">
         <div class="d-flex justify-content-center">
-          <iframe width="560" height="316" src="<%= video %>"" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+          <iframe width="560" height="316" src="<%= video.url %>"" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
           </iframe>
         </div>
       </div>
 <%}else{%>
     <div class="carousel-item">
       <div class="d-flex justify-content-center">
-        <iframe width="560" height="315" src=<%= video %> title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        <iframe width="560" height="315" src=<%= video.url %> title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
       </div>
     </div>
